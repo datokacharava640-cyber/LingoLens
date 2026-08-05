@@ -1,0 +1,27 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Build APK with Buildozer Action
+      uses: ArtemShtepenko/buildozer-action@v1.2.0
+      id: buildozer
+      with:
+        workdir: .
+        buildozer_version: master
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: LingoLens-APK
+        path: ${{ steps.buildozer.outputs.filename }}
