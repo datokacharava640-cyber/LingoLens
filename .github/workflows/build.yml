@@ -27,9 +27,8 @@ jobs:
         python -m pip install --upgrade pip setuptools
         python -m pip install "cython<3.0.0" buildozer
 
-    - name: Clean & Build APK with Buildozer
+    - name: Build APK with Buildozer
       run: |
-        buildozer android clean
         buildozer android debug
 
     - name: Upload APK Artifact
