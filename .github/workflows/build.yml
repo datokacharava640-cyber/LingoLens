@@ -13,6 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Download Georgian Font
+      run: |
+        curl -L -o font.ttf "https://github.com/google/fonts/raw/main/ofl/notosansgeorgian/NotoSansGeorgian-Regular.ttf"
+
     - name: Build APK with Official Kivy Docker
       run: |
         echo "y" | docker run -i --rm \
