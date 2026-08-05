@@ -1,6 +1,14 @@
+import os
 import json
 import urllib.parse
 import urllib.request
+
+from kivy.core.text import LabelBase
+
+# Kivy-ს სტანდარტული შრიფტის გლობალური ჩანაცვლება ქართულით
+if os.path.exists('font.ttf'):
+    LabelBase.register(name='Roboto', fn_regular='font.ttf')
+
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
