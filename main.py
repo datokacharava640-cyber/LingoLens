@@ -3,12 +3,6 @@ import json
 import urllib.parse
 import urllib.request
 
-from kivy.core.text import LabelBase
-
-# Kivy-ს სტანდარტული შრიფტის გლობალური ჩანაცვლება ქართულით
-if os.path.exists('font.ttf'):
-    LabelBase.register(name='Roboto', fn_regular='font.ttf')
-
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
@@ -16,6 +10,21 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.clock import Clock
+from kivy.core.text import LabelBase
+
+# აპლიკაციის საქაღალდის აბსოლუტური მისამართის პოვნა
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FONT_PATH = os.path.join(BASE_DIR, 'font.ttf')
+
+FONT_NAME = None
+
+# ქართული ფონტის უსაფრთხო რეგისტრაცია
+if os.path.exists(FONT_PATH):
+    try:
+        LabelBase.register(name='Georgian', fn_regular=FONT_PATH)
+        FONT_NAME = 'Georgian'
+    except Exception as e:
+        print(f"Font error: {e}")
 
 class LingoLensApp(App):
     def build(self):
@@ -26,6 +35,7 @@ class LingoLensApp(App):
         title_label = Label(
             text='LingoLens\nზუსტი თარგმანი და გრამატიკის კონტროლი',
             font_size='20sp',
+            font_name=FONT_NAME,
             size_hint_y=None,
             height=60,
             halign='center'
@@ -36,7 +46,8 @@ class LingoLensApp(App):
             hint_text='ჩაწერეთ ან ჩასვით ტექსტი ნებისმიერ ენაზე...',
             multiline=True,
             size_hint_y=0.35,
-            font_size='16sp'
+            font_size='16sp',
+            font_name=FONT_NAME
         )
         main_layout.add_widget(self.input_text)
         
@@ -45,14 +56,16 @@ class LingoLensApp(App):
         translate_btn = Button(
             text='თარგმნა (ქართულად)',
             background_color=(0.2, 0.6, 1, 1),
-            font_size='15sp'
+            font_size='15sp',
+            font_name=FONT_NAME
         )
         translate_btn.bind(on_press=self.translate_text)
         
         grammar_btn = Button(
             text='გრამატიკის შემოწმება',
             background_color=(0.2, 0.8, 0.4, 1),
-            font_size='15sp'
+            font_size='15sp',
+            font_name=FONT_NAME
         )
         grammar_btn.bind(on_press=self.check_grammar)
         
@@ -64,6 +77,7 @@ class LingoLensApp(App):
         self.result_label = Label(
             text='შედეგი გამოჩნდება აქ...',
             font_size='16sp',
+            font_name=FONT_NAME,
             size_hint_y=None,
             text_size=(None, None),
             halign='left',
