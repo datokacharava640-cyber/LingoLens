@@ -1,0 +1,52 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download Valid Georgian TTF Font
+      run: |
+        python3 -c "
+        import urllib.request, os
+
+        urls = [
+            'https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-georgian@latest/ka-400-normal.ttf',
+            'https://raw.githubusercontent.com/googlefonts/noto-fonts/main/hinted/ttf/NotoSansGeorgian/NotoSansGeorgian-Regular.ttf',
+            'https://raw.githubusercontent.com/bpguinicode/fonts/master/BPG-Gharbi.ttf'
+        ]
+
+        for url in urls:
+            try:
+                print('Downloading:', url)
+                urllib.request.urlretrieve(url, 'font.ttf')
+                with open('font.ttf', 'rb') as f:
+                    header = f.read(4)
+                if header in [b'\x00\x01\x00\x00', b'OTTO', b'true']:
+                    print('Successfully verified valid TTF font!')
+                    break
+            except Exception as e:
+                print('Failed:', e)
+        "
+        ls -lh font.ttf
+
+    - name: Build APK with Official Kivy Docker
+      run: |
+        echo "y" | docker run -i --rm \
+          -v ${{ github.workspace }}:/home/user/hostpython \
+          -w /home/user/hostpython \
+          kivy/buildozer android debug
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: LingoLens-APK
+        path: bin/*.apk
