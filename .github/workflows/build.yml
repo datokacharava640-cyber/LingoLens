@@ -1,0 +1,32 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download Static Georgian Font
+      run: |
+        curl -L -o font.ttf "https://github.com/dejavu-fonts/dejavu-fonts/raw/master/ttf/DejaVuSans.ttf"
+        ls -lh font.ttf
+
+    - name: Build APK with Official Kivy Docker
+      run: |
+        echo "y" | docker run -i --rm \
+          -v ${{ github.workspace }}:/home/user/hostpython \
+          -w /home/user/hostpython \
+          kivy/buildozer android debug
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: LingoLens-APK
+        path: bin/*.apk
