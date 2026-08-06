@@ -1,0 +1,39 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download Georgian Font
+      run: |
+        curl -L -o font.ttf "https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-georgian@latest/ka-400-normal.ttf"
+
+    - name: Configure Buildozer and Build APK
+      run: |
+        docker run -i --rm \
+          -v ${{ github.workspace }}:/home/user/hostpython \
+          -w /home/user/hostpython \
+          kivy/buildozer init || true
+
+        # buildozer.spec-ში .ttf-ის ჩამატება, რომ შრიფტი APK-ში გარანტირებულად მოხვდეს
+        sed -i 's/source.include_exts = .*/source.include_exts = py,png,jpg,kv,atlas,ttf,json/' buildozer.spec
+
+        echo "y" | docker run -i --rm \
+          -v ${{ github.workspace }}:/home/user/hostpython \
+          -w /home/user/hostpython \
+          kivy/buildozer android debug
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: LingoLens-APK
+        path: bin/*.apk
