@@ -1,0 +1,30 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download Georgian Font
+      run: |
+        curl -L -o font.ttf "https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-georgian@latest/ka-400-normal.ttf"
+
+    - name: Build with Buildozer Action
+      uses: ArtemS-Sk/buildozer-action@v1
+      with:
+        workdir: .
+        buildozer_version: master
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: LingoLens-APK
+        path: bin/*.apk
