@@ -6,13 +6,16 @@ title = LingoLens
 # (str) Package name
 package.name = lingolens
 
-# (str) Package domain (needed for android/ios packaging)
+# (str) Package domain
 package.domain = com.lingolens
+
+# (str) Application version (ეს აუცილებელია!)
+version = 0.1
 
 # (str) Source code where the main.py live
 source.dir = .
 
-# (list) Source files to include (include font.ttf)
+# (list) Source files to include
 source.include_exts = py,png,jpg,kv,atlas,ttf,json
 
 # (list) Application requirements
@@ -38,8 +41,8 @@ fullscreen = 0
 
 [buildozer]
 
-# (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
+# (int) Log level
 log_level = 2
 
-# (int) Display warning if buildozer is run as root (0 = error, 1 = warning)
+# (int) Display warning if buildozer is run as root
 warn_on_root = 1
