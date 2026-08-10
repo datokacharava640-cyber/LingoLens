@@ -1,0 +1,38 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libffi-dev libssl-dev ccache git ffmpeg libsqlite3-dev zlib1g-dev openjdk-17-jdk zip unzip autoconf libtool cmake lld
+
+    - name: Install Python dependencies
+      run: |
+        pip install --upgrade pip setuptools
+        pip install "cython<3.0.0" buildozer
+
+    - name: Build with Buildozer
+      run: |
+        buildozer android debug
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: LingoLens-debug-apk
+        path: bin/*.apk
