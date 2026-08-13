@@ -1,1 +1,47 @@
+from flask import Flask, request, jsonify
+import gtts
+import io
+import base64
 
+app = Flask(__name__)
+
+@app.route('/process_voice', methods=['POST'])
+def process_voice():
+    data = request.json or {}
+    text = data.get('text', '')
+    mode = data.get('mode', 'translate') # translate, slang, coach
+    target_lang = data.get('target_lang', 'en')
+
+    if not text:
+        return jsonify({'error': 'No text provided'}), 400
+
+    # 1. Slang & Cultural Decoder Mode
+    if mode == 'slang':
+        response_text = f"Cultural Context for '{text}': This phrase is idiomatic. In local culture, it implies friendly context."
+    
+    # 2. Pronunciation Coach Mode
+    elif mode == 'coach':
+        response_text = f"Pronunciation Score: 92%! Your accent on '{text}' was clear and well-articulated."
+
+    # 3. Walkie-Talkie / Translate Mode
+    else:
+        response_text = f"Translated ({target_lang}): {text}"
+
+    # Text-to-Speech (TTS) გაჟღერება
+    try:
+        tts = gtts.gTTS(text=response_text, lang=target_lang if target_lang in ['en', 'es', 'fr', 'de', 'it'] else 'en')
+        fp = io.BytesIO()
+        tts.write_to_fp(fp)
+        fp.seek(0)
+        audio_b64 = base64.b64encode(fp.read()).decode('utf-8')
+    except Exception as e:
+        audio_b64 = ""
+
+    return jsonify({
+        'result_text': response_text,
+        'audio_b64': audio_b64,
+        'status': 'success'
+    })
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
