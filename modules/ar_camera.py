@@ -7,12 +7,12 @@ def start():
     layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
     
     lbl = Label(
-        text="📷 AR Camera OCR Mode\n\nმიუშვირეთ კამერა წარწერას თარგმნისთვის.",
+        text="AR Camera OCR Mode\n\nმიუშვირეთ კამერა წარწერას თარგმნისთვის.",
         font_size='15sp',
         halign='center'
     )
     
-    capture_btn = Button(text="📸 ფოტოს გადაღება & თარგმნა", size_hint_y=0.25)
+    capture_btn = Button(text="ფოტოს გადაღება & თარგმნა", size_hint_y=0.25)
     close_btn = Button(text="დახურვა", size_hint_y=0.2)
     
     layout.add_widget(lbl)
