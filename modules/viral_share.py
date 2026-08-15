@@ -7,12 +7,12 @@ def start():
     layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
     
     lbl = Label(
-        text="📲 Viral Share Studio\n\nშექმენით ლამაზი ბარათი ნათარგმნი ფრაზით და გააზიარეთ Story-ში!",
+        text="Viral Share Studio\n\nშექმენით ლამაზი ბარათი ნათარგმნი ფრაზით და გააზიარეთ Story-ში!",
         font_size='14sp',
         halign='center'
     )
     
-    share_btn = Button(text="🎨 ბარათის გენერირება & გაზიარება", size_hint_y=0.25)
+    share_btn = Button(text="ბარათის გენერირება & გაზიარება", size_hint_y=0.25)
     close_btn = Button(text="დახურვა", size_hint_y=0.2)
     
     layout.add_widget(lbl)
