@@ -6,9 +6,9 @@ from kivy.uix.button import Button
 def start():
     layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
     
-    title_lbl = Label(text="🎓 AI Coach - დღის გაკვეთილი", font_size='16sp', size_hint_y=0.2)
+    title_lbl = Label(text="AI Coach - დღის გაკვეთილი", font_size='16sp', size_hint_y=0.2)
     tip_lbl = Label(
-        text="💡 დღის რჩევა:\nგამოიყენეთ 'Would you mind...' როცა გსურთ ზრდილობიანი თხოვნა.\n\nმაგალითად: 'Would you mind closing the door?'",
+        text="დღის რჩევა:\nგამოიყენეთ 'Would you mind...' როცა გსურთ ზრდილობიანი თხოვნა.\n\nმაგალითად: 'Would you mind closing the door?'",
         size_hint_y=0.6,
         halign='center'
     )
