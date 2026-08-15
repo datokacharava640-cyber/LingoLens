@@ -7,10 +7,10 @@ def start():
     layout = BoxLayout(orientation='vertical', padding=10, spacing=8)
     
     phrases = [
-        "🆘 მჭირდება დახმარება! / I need help!",
-        "🏥 სადაა უახლოესი საავადმყოფო? / Where is the hospital?",
-        "👮 გამოიძახეთ პოლიცია! / Call the police!",
-        "📍 დავიკარგე / I am lost"
+        "SOS: მჭირდება დახმარება! / I need help!",
+        "საავადმყოფო: სადაა უახლოესი საავადმყოფო? / Where is the hospital?",
+        "პოლიცია: გამოიძახეთ პოლიცია! / Call the police!",
+        "ლოკაცია: დავიკარგე / I am lost"
     ]
     
     for p in phrases:
