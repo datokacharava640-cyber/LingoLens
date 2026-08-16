@@ -18,11 +18,11 @@ source.include_exts = py,png,jpg,kv,atlas,db,ttf,json
 # (str) Application versioning
 version = 10.0.0
 
-# (str) Python for Android branch (აუცილებელია შეცდომის ასარიდებლად)
+# (str) Python for Android branch
 p4a.branch = master
 
 # (list) Application requirements
-requirements = python3,kivy,requests,urllib3,certifi,idna,charset-normalizer,plyer,pypdf,android
+requirements = python3,kivy==2.2.1,requests,urllib3,certifi,idna,charset-normalizer,plyer,pypdf,android
 
 # (str) Supported orientation
 orientation = portrait
