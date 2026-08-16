@@ -1,0 +1,13 @@
+- name: Install Test Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest requests pypdf kivy plyer
+
+      - name: Run PyTest
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PYTHONPATH: .
+          KIVY_NO_ARGS: "1"
+          KIVY_NO_CONSOLELOG: "1"
+        run: |
+          pytest test_main.py
