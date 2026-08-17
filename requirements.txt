@@ -1,4 +1,0 @@
-websockets
-websocket-client
-requests
-google-genai
