@@ -1,0 +1,28 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: kivy/buildozer:latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build APK with Buildozer
+      run: |
+        echo "cython==0.29.33" > /tmp/constraints.txt
+        export PIP_CONSTRAINT=/tmp/constraints.txt
+        pip install "cython==0.29.33" --force-reinstall
+        yes | buildozer android debug
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: LingoLens-APK
+        path: bin/*.apk
