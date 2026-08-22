@@ -1,19 +1,9 @@
+import os
 from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import google.generativeai as genai
-import os
 
 app = FastAPI()
-
-# CORS-ის დამატება Kivy მოთხოვნებისთვის
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if GEMINI_API_KEY:
@@ -27,10 +17,16 @@ class TranslateRequest(BaseModel):
 @app.post("/api/index")
 async def translate(req: TranslateRequest):
     if not GEMINI_API_KEY:
-        raise HTTPException(status_code=500, detail="API Key missing")
+        raise HTTPException(status_code=500, detail="GEMINI_API_KEY is not set on Vercel")
+    
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        prompt = f"Translate from '{req.source_lang}' to '{req.target_lang}'. Output only translation:\n\n{req.text}"
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        prompt = (
+            f"You are a professional translator. Translate the following text "
+            f"from '{req.source_lang}' to '{req.target_lang}'. "
+            f"Output ONLY the translated text, with no additional explanations or quotes.\n\n"
+            f"Text: {req.text}"
+        )
         response = model.generate_content(prompt)
         return {"translated_text": response.text.strip()}
     except Exception as e:
