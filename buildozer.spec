@@ -37,7 +37,7 @@ android.api = 33
 android.minapi = 24
 
 # (str) Android NDK version
-android.ndk = 25c
+android.ndk = 25b
 
 # (bool) If True, then skip building an APK
 android.skip_update = False
