@@ -7,7 +7,7 @@ title = LingoLens Ultra Pro
 package.name = lingolens
 
 # (str) Package domain (needed for android packaging)
-package.domain = com.lingolens.app
+package.domain = org.lingolens
 
 # (str) Source code where the main.py live
 source.dir = .
