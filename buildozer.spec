@@ -22,7 +22,7 @@ source.include_patterns = res/*
 version = 3.3.0
 
 # (list) Application requirements (გამართული და თავსებადი ვერსიები)
-requirements = python3,kivy==2.3.0,android,pyjnius,numpy==1.26.4,pillow,requests,urllib3,certifi,openssl
+requirements = python3,kivy==2.3.0,android,pyjnius,numpy==v1.26.4,pillow,requests,urllib3,certifi,openssl
 
 # (bool) Build code as Cython (1 = True, 0 = False)
 build_as_cython = 0
