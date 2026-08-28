@@ -1,0 +1,33 @@
+def translate_text(self, instance):
+  text = self.input_text.text.strip()
+  if not text:
+    self.result_label.text = 'შეიყვანეთ ტექსტი!'
+    return
+
+  self.result_label.text = 'მიმდინარეობს თარგმნა...'
+
+  try:
+    url = f'{self.server_url}/api/index'
+    payload = {
+        'text': text,
+        'source': self.src_lang,
+        'target': self.target_lang,
+    }
+    headers = {'Content-Type': 'application/json'}
+
+    resp = requests.post(url, json=payload, headers=headers, timeout=10)
+
+    if resp.status_code == 200:
+      data = resp.json()
+      self.result_label.text = data.get(
+          'translated_text', 'თარგმანი ვერ მოიძებნა'
+      )
+    else:
+      try:
+        err_msg = resp.json().get('error', resp.text)
+        self.result_label.text = f'შეცდომა {resp.status_code}: {err_msg}'
+      except Exception:
+        self.result_label.text = f'სერვერის შეცდომა: {resp.status_code}'
+
+  except Exception as e:
+    self.result_label.text = f'ქსელის შეცდომა: {str(e)}'
