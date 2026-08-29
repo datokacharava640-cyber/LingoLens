@@ -15,7 +15,7 @@ icon.filename = %(source.dir)s/icon.png
 requirements = python3,kivy==2.3.0,pillow,urllib3==1.26.15,certifi,requests,pyjnius,android
 
 # python-for-android სტაბილური შტო
-p4a.branch = release-2024.01.21
+p4a.branch = master
 
 build_as_cython = 0
 
