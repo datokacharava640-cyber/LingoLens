@@ -2,10 +2,50 @@ import os
 from fastapi import FastAPI, HTTPException, Security, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import httpx
 
 app = FastAPI(title="LingoLens Proxy Backend", version="1.0.0")
+
+# Custom Swagger UI HTML with Vercel Speed Insights
+def custom_swagger_ui_html():
+    return """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>LingoLens Proxy Backend - API Documentation</title>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css">
+        <link rel="icon" type="image/png" href="https://fastapi.tiangolo.com/img/favicon.png">
+        
+        <!-- Vercel Speed Insights -->
+        <script>
+            window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+        </script>
+        <script defer src="/_vercel/speed-insights/script.js"></script>
+    </head>
+    <body>
+        <div id="swagger-ui"></div>
+        <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+        <script>
+            const ui = SwaggerUIBundle({
+                url: '/openapi.json',
+                dom_id: '#swagger-ui',
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIBundle.SwaggerUIStandalonePreset
+                ],
+                layout: "BaseLayout",
+                deepLinking: true
+            })
+        </script>
+    </body>
+    </html>
+    """
+
+@app.get("/docs", include_in_schema=False)
+async def custom_swagger_ui():
+    return HTMLResponse(content=custom_swagger_ui_html())
 
 # CORS უსაფრთხოება
 app.add_middleware(

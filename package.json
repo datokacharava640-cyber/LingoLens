@@ -1,0 +1,20 @@
+{
+  "name": "lingo-lens",
+  "version": "3.6.0",
+  "description": "LingoLens - AI-Powered Translation Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests specified\""
+  },
+  "keywords": [
+    "translation",
+    "ai",
+    "fastapi",
+    "vercel"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
+}
