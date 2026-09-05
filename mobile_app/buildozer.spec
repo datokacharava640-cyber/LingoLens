@@ -1,1 +1,37 @@
+[app]
 
+# App titles and metadata
+title = LingoLens Ultra Pro
+package.name = lingolens
+package.domain = org.lingolens
+source.dir = .
+source.include_exts = py,png,jpg,kv,atlas,ttf,db,json
+version = 3.6.0
+
+# Requirements
+requirements = python3,kivy,certifi,urllib3,requests,idna,chardet,plyer,pyjnius,edge-tts,asyncio,aiohttp,attrs,multidict,yarl,frozenlist,aiosignal,pvporcupine,pvrecorder
+
+# Orientation & Display
+orientation = portrait
+fullscreen = 0
+
+# Android Permissions (დაემატა FOREGROUND_SERVICE და WAKE_LOCK ფონური მოსმენისთვის)
+android.permissions = INTERNET, ACCESS_NETWORK_STATE, ACCESS_WIFI_STATE, CAMERA, RECORD_AUDIO, MODIFY_AUDIO_SETTINGS, VIBRATE, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, FOREGROUND_SERVICE, WAKE_LOCK
+
+# Android API & NDK Specs
+android.api = 33
+android.minapi = 24
+android.ndk = 25b
+android.archs = arm64-v8a
+android.allow_backup = True
+
+# p4a-ს სტაბილურ შტოზე გადაყვანა Python-ის ვერსიების კონფლიქტის თავიდან ასაცილებლად
+p4a.fork = kivy
+p4a.branch = release-2024.01.21
+
+# Custom Manifest Template Link
+android.manifest.template = AndroidManifest.tmpl.xml
+
+[buildozer]
+log_level = 2
+warn_on_root = 1
