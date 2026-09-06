@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+requests
+deep-translator
+edge-tts
+Pillow
+pytesseract
+python-multipart
