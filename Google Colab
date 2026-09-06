@@ -1,0 +1,16 @@
+# 1. რეპოზიტორიის კლონირება (თუ უკვე კლონირებული არ გაქვთ)
+!git clone https://github.com/datokacharava640/LingoLens.git
+
+# 2. გადასვლა mobile_app საქაღალდეში, სადაც დევს main.py და buildozer.spec
+%cd LingoLens/mobile_app
+
+# 3. სისტემური დამოკიდებულებების დაინსტალირება (Tesseract-ის ჩათვლით)
+!sudo apt-get update
+!sudo apt-get install -y build-essential libsqlite3-dev sqlite3 bzip2 libbz2-dev zlib1g-dev libssl-dev openssl libgdbm-dev libgdbm-compat-dev liblzma-dev libreadline-dev libncursesw5-dev libffi-dev uuid-dev git ccache ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixin-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev openjdk-17-jdk zip unzip tesseract-ocr libtesseract-dev
+
+# 4. Pip, Cython და Buildozer-ის დაინსტალირება
+!pip install --upgrade pip setuptools
+!pip install cython==0.29.36 buildozer
+
+# 5. Android APK-ს აწყობა
+!buildozer -v android debug
