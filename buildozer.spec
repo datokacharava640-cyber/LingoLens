@@ -41,7 +41,7 @@ android.gradle_dependencies = com.google.mlkit:text-recognition:16.0.0, androidx
 android.enable_androidx = True
 
 # არქიტექტურა
-android.archs = arm64-v8a, armeabi-v7a
+android.archs = arm64-v8a
 android.allow_backup = True
 
 # -----------------------------------------------------------------------------
