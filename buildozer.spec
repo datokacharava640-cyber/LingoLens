@@ -61,7 +61,7 @@ android.enable_androidx = True
 android.enable_jetifier = True
 
 # (list) The Android archs to build for
-android.archs = arm64-v8a, armeabi-v7a
+android.archs = arm64-v8a
 
 # (str) Extra Manifest
 android.extra_manifest_xml = extra_manifest.xml
