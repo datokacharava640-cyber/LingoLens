@@ -1,7 +1,0 @@
-kivy==2.3.0
-plyer==2.1.0
-chardet==5.2.0
-idna==3.6
-certifi==2024.2.2
-pillow==10.2.0
-requests==2.31.0
