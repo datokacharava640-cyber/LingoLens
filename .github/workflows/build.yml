@@ -1,0 +1,28 @@
+name: Build Android Debug APK
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: kivy/buildozer:latest
+      options: --user 1000
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build APK with Buildozer
+      run: |
+        buildozer android debug
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: LingoLens-Debug-APK
+        path: bin/*.apk
