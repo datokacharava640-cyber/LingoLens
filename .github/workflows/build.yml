@@ -1,0 +1,69 @@
+name: Build Android Debug APK
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          git \
+          ffmpeg \
+          pkg-config \
+          autoconf \
+          automake \
+          libtool \
+          ccache \
+          libffi-dev \
+          libssl-dev \
+          python3-dev \
+          zip \
+          unzip \
+          openjdk-17-jdk \
+          libsdl2-dev \
+          libsdl2-image-dev \
+          libsdl2-mixer-dev \
+          libsdl2-ttf-dev \
+          libportmidi-dev \
+          libswscale-dev \
+          libavformat-dev \
+          libavcodec-dev \
+          zlib1g-dev \
+          libsqlite3-dev \
+          sqlite3 \
+          libbz2-dev \
+          gettext
+
+    - name: Install Stable Buildozer & p4a
+      run: |
+        pip install --upgrade pip setuptools wheel
+        pip install "cython<3.0"
+        pip install "buildozer==1.5.0"
+        pip install "python-for-android==2024.1.21"
+
+    - name: Build APK with Buildozer
+      run: |
+        yes | buildozer android debug
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: LingoLens-Debug-APK
+        path: bin/*.apk
