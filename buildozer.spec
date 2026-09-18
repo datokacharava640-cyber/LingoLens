@@ -20,9 +20,9 @@ fullscreen = 0
 
 android.permissions = CAMERA, RECORD_AUDIO, INTERNET, ACCESS_NETWORK_STATE, READ_MEDIA_IMAGES, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
 
-android.api = 31
+android.api = 33
 android.minapi = 24
-android.ndk = 23b
+android.ndk = 25b
 
 android.accept_sdk_license = True
 android.uses_cleartext_traffic = true
