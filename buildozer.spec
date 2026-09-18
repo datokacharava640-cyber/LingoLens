@@ -10,7 +10,7 @@ source.exclude_patterns = api/*,Dockerfile,vercel.json,setup.py
 version = 4.0.0
 
 # python3 უნდა ეწეროს ვერსიის გარეშე
-requirements = python3,kivy==2.2.1,requests,urllib3,certifi,charset-normalizer,idna,plyer
+requirements = python3==3.11.0, kivy==2.2.1, cython==3.0.10, requests, urllib3, chardet, idna, plyer
 
 # p4a-ს master ტოტი უზრუნველყოფს უახლეს C-პატჩებს
 p4a.branch = master
