@@ -39,7 +39,6 @@ async def stt_translate(
     try:
         audio_bytes = await file.read()
 
-        # ფაილის ზომის შემოწმება (მაქს. 5MB)
         if len(audio_bytes) > MAX_FILE_SIZE:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -49,7 +48,6 @@ async def stt_translate(
         audio_file = io.BytesIO(audio_bytes)
         audio_file.name = file.filename or "audio.wav"
 
-        # ენის კოდის ISO 639-1 ფორმატში გადაყვანა (მაგ. zh-CN -> zh)
         whisper_lang = src_lang.split('-')[0].lower() if src_lang else None
 
         # 1. ხმის ტექსტად გარდაქმნა Whisper-ით
@@ -63,13 +61,13 @@ async def stt_translate(
         if not extracted_text.strip():
             return {"extracted_text": "", "translated_text": ""}
 
-        # 2. ტექსტის თარგმნა GPT-4o-mini-თ
+        # 2. ტექსტის თარგმნა GPT-4o-mini-თ (განახლებული გრამატიკული მოთხოვნით)
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {
                     "role": "system",
-                    "content": f"You are a professional translator. Translate the given text accurately from '{src_lang}' to '{target_lang}'. Return only the translation, no commentary."
+                    "content": f"You are a professional translator. Translate the given text accurately from '{src_lang}' to '{target_lang}'. Ensure the output is grammatically flawless, natural, and fluent. Return only the translation, no commentary."
                 },
                 {"role": "user", "content": extracted_text}
             ],
@@ -99,7 +97,7 @@ async def translate_text(
     src_lang: str = Form(...),
     target_lang: str = Form(...)
 ):
-    """პირდაპირი ტექსტის თარგმნა"""
+    """პირდაპირი ტექსტის თარგმნა (განახლებული გრამატიკული ინსტრუქციით)"""
     try:
         if not text.strip():
             return {"translated_text": ""}
@@ -109,7 +107,7 @@ async def translate_text(
             messages=[
                 {
                     "role": "system",
-                    "content": f"You are a translator. Translate text accurately from '{src_lang}' to '{target_lang}'. Output only translated text."
+                    "content": f"You are an expert translator. Translate text accurately from '{src_lang}' to '{target_lang}'. Ensure the output is grammatically flawless, natural, and fluent. Output only the translated text without commentary."
                 },
                 {"role": "user", "content": text}
             ],
@@ -130,7 +128,7 @@ async def ocr_translate(
     file: UploadFile = File(...),
     target_lang: str = Form(...)
 ):
-    """Live OCR — ფოტოდან ტექსტის ამოცნობა და თარგმნა Vision მოდელით"""
+    """Live OCR — ფოტოდან ტექსტის ამოცნობა და თარგმნა (განახლებული დაზღვეული პარსინგით)"""
     try:
         image_bytes = await file.read()
         base64_image = base64.b64encode(image_bytes).decode('utf-8')
@@ -144,6 +142,7 @@ async def ocr_translate(
                         {
                             "type": "text",
                             "text": f"Extract any text visible in this image and translate it to '{target_lang}'. "
+                                    f"Ensure the translation is grammatically correct. "
                                     f"Respond strictly in this format:\nEXTRACTED: <original text>\nTRANSLATED: <translated text>"
                         },
                         {
@@ -161,15 +160,21 @@ async def ocr_translate(
         extracted = ""
         translated = ""
 
-        for line in content.split("\n"):
-            if line.startswith("EXTRACTED:"):
-                extracted = line.replace("EXTRACTED:", "").strip()
-            elif line.startswith("TRANSLATED:"):
-                translated = line.replace("TRANSLATED:", "").strip()
+        # გაუმჯობესებული და უსაფრთხო პარსინგი
+        lines = [line.strip() for line in content.split("\n") if line.strip()]
+        for line in lines:
+            if "EXTRACTED:" in line:
+                extracted = line.split("EXTRACTED:", 1)[1].strip()
+            elif "TRANSLATED:" in line:
+                translated = line.split("TRANSLATED:", 1)[1].strip()
+
+        # თუ ფორმატი მაინც აირია AI-სგან, არაფერი დაიკარგოს
+        if not extracted and not translated:
+            translated = content
 
         return {
             "extracted_text": extracted,
-            "translated_text": translated or content
+            "translated_text": translated
         }
     except Exception as e:
         raise HTTPException(
