@@ -1,8 +1,0 @@
-kivy==2.3.0
-requests
-certifi
-urllib3
-charset-normalizer
-idna
-pillow
-plyer
