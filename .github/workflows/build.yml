@@ -1,0 +1,70 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 1. ვაყენებთ სტაბილურ Python 3.10-ს (და არა 3.14-ს)
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      # 2. სისტემური დამოკიდებულებების დაყენება Ubuntu-ზე
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            git \
+            ffmpeg \
+            libsdl2-dev \
+            libsdl2-image-dev \
+            libsdl2-mixer-dev \
+            libsdl2-ttf-dev \
+            libportmidi-dev \
+            libswscale-dev \
+            libavformat-dev \
+            libavcodec-dev \
+            zlib1g-dev \
+            libgdbm-dev \
+            libncurses5-dev \
+            libssl-dev \
+            libffi-dev \
+            libsqlite3-dev \
+            libreadline-dev \
+            tk-dev \
+            gfortran \
+            liblzma-dev \
+            libjpeg-dev \
+            ccache
+
+      # 3. Cython-ის სტაბილური ვერსიისა და Buildozer-ის დაყენება
+      - name: Install Buildozer and Cython
+        run: |
+          pip install --upgrade pip
+          pip install "cython<3.0.0"
+          pip install buildozer
+
+      # 4. APK-ის აწყობა
+      - name: Build APK with Buildozer
+        run: |
+          buildozer -v android debug
+
+      # 5. მზა APK-ის ატვირთვა GitHub Release Artifact-ად
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LingoLens-debug-apk
+          path: bin/*.apk
