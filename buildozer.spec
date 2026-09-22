@@ -60,7 +60,7 @@ android.enable_androidx = True
 android.enable_jetifier = True
 
 # (list) The Android archs to build for (ho an'ny finday vaovao)
-android.archs = arm64-v8a, armeabi-v7a
+android.archs = arm64-v8a
 
 # (bool) Backup option
 android.allow_backup = True
