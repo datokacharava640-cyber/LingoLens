@@ -1,0 +1,33 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    container:
+      image: ghcr.io/kivy/buildozer:latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Fix Directory Permissions
+        run: git config --global --add safe.directory /__w/LingoLens/LingoLens
+
+      - name: Build APK with Buildozer
+        env:
+          ACCEPT_SDK_LICENSES: "True"
+        run: |
+          buildozer -v android debug
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LingoLens-debug-apk
+          path: bin/*.apk
