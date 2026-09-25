@@ -28,12 +28,12 @@ source.exclude_patterns = Dockerfile, vercel.json, setup.py, *.ipynb, .env, .git
 version = 6.0.1
 
 # (list) Application requirements
-requirements = python3==3.10.12, hostpython3==3.10.12, kivy==2.3.0, pillow, requests, urllib3, charset-normalizer, idna, certifi, plyer, pyjnius
+requirements = python3,kivy,requests,urllib3,charset-normalizer,idna,certifi,plyer,pyjnius,pillow
 
 # (str) Supported orientation
 orientation = portrait
 
-# (bool) Indicate if the application should be fullscreen or not
+# (boolq) Indicate if the application should be fullscreen or not
 fullscreen = 0
 
 # (list) Permissions
