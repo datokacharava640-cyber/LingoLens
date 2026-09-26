@@ -67,7 +67,7 @@ android.enable_jetifier = True
 android.archs = arm64-v8a
 
 # სტაბილური ბრენჩი Python 3.11 მხარდაჭერისთვის (ვბლოკავთ Python 3.14 კრაშს)
-p4a.branch = release-2023.12.2
+p4a.branch = v2024.01.21
 
 # (bool) Backup option
 android.allow_backup = True
