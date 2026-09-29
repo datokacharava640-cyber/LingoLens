@@ -1,13 +1,13 @@
 # ==============================================================================
-# LingoLens AI - Configuration File
+# LingoLens AI - Configuration & API Connection
 # ==============================================================================
 
 # აპლიკაციის სახელი და ვერსია
 APP_NAME = "LingoLens"
 VERSION = "1.0.0"
 
-# შენი სერვერის მთავარი მისამართი (Backend URL)
-BACKEND_URL = "http://37.27.255.1:8000"
+# სერვერის მთავარი მისამართი (Hetzner Linux Server)
+BACKEND_URL = "http://37.27.255.1:8001"
 
 # საიდუმლო გასაღები სერვერთან დასაკავშირებლად
 API_SECRET_KEY = "LingoLens_Secure_Key_98765XYZ!#$@"
