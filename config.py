@@ -2,12 +2,13 @@
 # LingoLens AI - Configuration & API Connection
 # ==============================================================================
 
-# აპლიკაციის სახელი და ვერსია
+# aplikaciis saxeli da versia
 APP_NAME = "LingoLens"
 VERSION = "1.0.0"
 
-# სერვერის მთავარი მისამართი (ადგილობრივი Termux სერვერი)
-url = "http://localhost:8002/translate"
+# serveris mtavari misamarti (Hetzner Linux Server)
+BACKEND_URL = "http://37.27.255.1:8001"
+url = f"{BACKEND_URL}/translate"
 
-# საიდუმლო გასაღები სერვერთან დასაკავშირებლად
+# saidumlo gasagebi servertan dasakavshireblad
 API_SECRET_KEY = "LingoLens_Secure_Key_98765XYZ!#$@"
