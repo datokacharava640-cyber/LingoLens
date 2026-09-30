@@ -68,7 +68,7 @@ except ImportError:
         def worker():
             try:
                 # ადგილობრივი Termux სერვერის მისამართი და პორტი (8002)
-                url = "http://127.0.0.1:8002/translate"
+                url = "http://localhost:8002/translate"
                 payload = json.dumps({
                     "text": text, "source": src_lang, "target": target_lang, "prompt": prompt
                 }).encode('utf-8')
