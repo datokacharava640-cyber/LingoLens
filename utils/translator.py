@@ -6,8 +6,8 @@ import threading
 import requests
 from kivy.clock import Clock
 
-# სერვერის კონფიგურაცია (ადგილობრივი Termux სერვერი)
-BACKEND_URL = "http://127.0.0.1:8002"
+# სერვერის კონფიგურაცია (შენი პირადი Hetzner სერვერი)
+BACKEND_URL = "http://37.27.255.1:8001"
 APP_NAME = "LingoLens"
 VERSION = "6.0.2"
 
