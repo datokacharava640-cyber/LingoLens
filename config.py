@@ -7,7 +7,7 @@ APP_NAME = "LingoLens"
 VERSION = "1.0.0"
 
 # სერვერის მთავარი მისამართი (ადგილობრივი Termux სერვერი)
-BACKEND_URL = "http://127.0.0.1:8002"
+url = "http://localhost:8002/translate"
 
 # საიდუმლო გასაღები სერვერთან დასაკავშირებლად
 API_SECRET_KEY = "LingoLens_Secure_Key_98765XYZ!#$@"
