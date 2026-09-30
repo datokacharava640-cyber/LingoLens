@@ -11,8 +11,6 @@ async def translate_text(data: dict):
     text = data.get("text", "")
     target_lang = data.get("target_lang", "en")
     
-    # აქ შეგიძლია ჩასვა Gemini-ს თარგმნის ლოგიკა
-    # მაგალითისთვის, ვთარგმნით ან ვაგენერირებთ პასუხს:
     model = genai.GenerativeModel("gemini-1.5-flash")
     prompt = f"Translate the following text to {target_lang}: {text}"
     response = model.generate_content(prompt)
@@ -22,7 +20,7 @@ async def translate_text(data: dict):
     return {"translated_text": translated}
 
 @app.post("/translate-image")
-async def translate_image(file: UploadFile = File(...), target_lang: Form("ka")):
+async def translate_image(file: UploadFile = File(...), target_lang: str = Form("ka")):
     # სურათის დამუშავებისა და OCR/თარგმნის ლოგიკა
     contents = await file.read()
     
