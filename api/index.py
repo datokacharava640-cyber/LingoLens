@@ -1,5 +1,6 @@
 import threading
 import requests
+from kivy.clock import Clock  # აუცილებელია UI-ს უსაფრთხო განახლებისთვის
 from config import API_ENDPOINT, API_SECRET_KEY
 
 
@@ -7,7 +8,7 @@ def send_data_to_server(payload_data: dict, callback=None):
     """სერვერთან უსაფრთხო კომუნიკაცია API Key-ის გამოყენებით (ასინქრონული, ფონურ ნაკადში)."""
     def background_task():
         headers = {
-            "X-API-Key": API_SECRET_KEY,
+            "X-Api-Key": API_SECRET_KEY,  # FastAPI-სთან სრული თანხვედრისთვის
             "Content-Type": "application/json",
         }
 
@@ -25,11 +26,11 @@ def send_data_to_server(payload_data: dict, callback=None):
         except requests.exceptions.RequestException as e:
             result = {"success": False, "error": str(e)}
 
-        # თუ გადაცემულია ქოლბექი (callback), შედეგი უბრუნდება მთავარ ნაკადს
+        # შედეგი უბრუნდება მთავარ ნაკადს Clock-ის მეშვეობით
         if callback:
-            callback(result)
+            Clock.schedule_once(lambda dt: callback(result), 0)
 
-    # თრედის გაშვება იმისათვის, რომ UI ("Loading..." ეკრანი) არ ჩაიჭედოს
+    # თრედის გაშვება იმისათვის, რომ UI არ ჩაიჭედოს
     threading.Thread(target=background_task, daemon=True).start()
 
 
@@ -43,6 +44,6 @@ def check_server_health(callback=None):
             is_healthy = False
             
         if callback:
-            callback(is_healthy)
+            Clock.schedule_once(lambda dt: callback(is_healthy), 0)
 
     threading.Thread(target=background_check, daemon=True).start()
