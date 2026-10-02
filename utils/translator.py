@@ -2,6 +2,7 @@ import json
 import threading
 import urllib.request
 import config  # ვრთავთ კონფიგურაციის ფაილს
+from kivy.clock import Clock  # ვრთავთ Clock-ს მთავარ ნაკადში გამოსაძახებლად
 
 def translate_text(prompt, text, src_lang, target_lang, callback):
     def worker():
@@ -16,11 +17,11 @@ def translate_text(prompt, text, src_lang, target_lang, callback):
                 "prompt": prompt
             }).encode("utf-8")
             
-            # ვამატებთ საიდუმლო გასაღებს ჰედედერში (თუ სერვერი ითხოვს ავტორიზაციას)
+            # ვამატებთ საიდუმლო გასაღებს ჰედედერში
             api_key = getattr(config, 'API_SECRET_KEY', '')
             headers = {
                 "Content-Type": "application/json",
-                "X-API-Key": api_key  # ან "Authorization": f"Bearer {api_key}" (გააჩნია როგორ ააწყვე სერვერი)
+                "X-API-Key": api_key  
             }
             
             req = urllib.request.Request(
@@ -38,12 +39,13 @@ def translate_text(prompt, text, src_lang, target_lang, callback):
                     or str(res_data)
                 )
                 if callback:
-                    callback(result_text)
+                    # ვუზრუნველყოფთ, რომ UI განახლდეს მთავარ ნაკადში
+                    Clock.schedule_once(lambda dt: callback(result_text), 0)
                     
         except Exception as e:
             print("Translation Server Error:", e)
             if callback:
-                callback(None)
+                Clock.schedule_once(lambda dt: callback(None), 0)
 
     threading.Thread(target=worker, daemon=True).start()
 
@@ -56,8 +58,6 @@ def analyze_image_and_translate(image_path, target_language="ka", callback=None)
         try:
             url = f"{getattr(config, 'BACKEND_URL', 'http://37.27.255.1:8000')}/api/v1/process"
             
-            # მულტიპარტ (Multipart/form-data) მოთხოვნის აწყობა urllib-ით სირთულის თავიდან ასაცილებლად 
-            # ან მარტივი ბინარული გაგზავნა:
             with open(image_path, "rb") as f:
                 image_data = f.read()
 
@@ -67,7 +67,6 @@ def analyze_image_and_translate(image_path, target_language="ka", callback=None)
                 "X-API-Key": getattr(config, 'API_SECRET_KEY', '')
             }
 
-            # ვამზადებთ მულტიპარტ σgetBody-ს
             body = (
                 f"--{boundary}\r\n"
                 f"Content-Disposition: form-data; name=\"target_language\"\r\n\r\n"
@@ -83,11 +82,11 @@ def analyze_image_and_translate(image_path, target_language="ka", callback=None)
                 res_data = json.loads(response.read().decode("utf-8"))
                 result_text = res_data.get("translated_text", "ვერ მოხერხდა დამუშავება.")
                 if callback:
-                    callback(result_text)
+                    Clock.schedule_once(lambda dt: callback(result_text), 0)
 
         except Exception as e:
             print("Image Analysis Server Error:", e)
             if callback:
-                callback("სერვერთან დაკავშირების ან დამუშავების შეცდომა.")
+                Clock.schedule_once(lambda dt: callback("სერვერთან დაკავშირების ან დამუშავების შეცდომა."), 0)
 
     threading.Thread(target=worker, daemon=True).start()
