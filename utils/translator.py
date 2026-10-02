@@ -17,11 +17,11 @@ def translate_text(prompt, text, src_lang, target_lang, callback):
                 "prompt": prompt
             }).encode("utf-8")
             
-            # ვამატებთ საიდუმლო გასაღებს ჰედედერში
+            # ვასწორებთ ჰედერს FastAPI-ს სტანდარტზე (X-Api-Key)
             api_key = getattr(config, 'API_SECRET_KEY', '')
             headers = {
                 "Content-Type": "application/json",
-                "X-API-Key": api_key  
+                "X-Api-Key": api_key  
             }
             
             req = urllib.request.Request(
@@ -64,7 +64,7 @@ def analyze_image_and_translate(image_path, target_language="ka", callback=None)
             boundary = "BoundaryStringLingoLens"
             headers = {
                 "Content-Type": f"multipart/form-data; boundary={boundary}",
-                "X-API-Key": getattr(config, 'API_SECRET_KEY', '')
+                "X-Api-Key": getattr(config, 'API_SECRET_KEY', '')  # აქაც ვასწორებთ
             }
 
             body = (
