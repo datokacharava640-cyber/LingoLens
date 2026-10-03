@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LingoLens - Google Lens Style</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; text-align: center; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .lang-selector { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        select { padding: 10px; border-radius: 8px; border: 1px solid #ccc; width: 42%; font-size: 16px; }
+        .camera-btn { background: #1a73e8; color: white; border: none; padding: 15px 25px; font-size: 18px; border-radius: 50px; cursor: pointer; margin: 15px 0; width: 100%; }
+        .result-box { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: left; min-height: 80px; border: 1px solid #ddd; }
+        .share-btn { background: #34a853; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-top: 10px; width: 100%; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>LingoLens</h2>
+    
+    <div class="lang-selector">
+        <select id="sourceLang">
+            <option value="eng">ინგლისური</option>
+            <option value="ita">იტალიური</option>
+        </select>
+        <span>⇄</span>
+        <select id="targetLang">
+            <option value="ka">ქართული</option>
+        </select>
+    </div>
+
+    <input type="file" id="imageInput" accept="image/*" capture="environment" style="display: none;" onchange="uploadImage(event)">
+    <button class="camera-btn" onclick="document.getElementById('imageInput').click()">📷 სურათის გადაღება / ატვირთვა</button>
+
+    <div class="result-box" id="resultOutput">აქ გამოჩნდება თარგმანი...</div>
+
+    <button class="share-btn" onclick="shareResult()">გაზიარება 📤</button>
+</div>
+
+<script>
+async function uploadImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    document.getElementById("resultOutput").innerText = "მიმდინარეობს დამუშავება და თარგმნა...";
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("source_lang", document.getElementById("sourceLang").value);
+    formData.append("target_lang", document.getElementById("targetLang").value);
+
+    try {
+        const response = await fetch("http://localhost:8000/translate-image/", {
+            method: "POST",
+            body: formData
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+            document.getElementById("resultOutput").innerText = data.translated_text;
+        } else {
+            document.getElementById("resultOutput").innerText = "შეცდომა: " + data.error;
+        }
+    } catch (err) {
+        document.getElementById("resultOutput").innerText = "სერვერთან კავშირის შეცდომა!";
+    }
+}
+
+async function shareResult() {
+    const textToShare = document.getElementById("resultOutput").innerText;
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: 'LingoLens თარგმანი',
+                text: textToShare,
+            });
+        } catch (error) {
+            console.log('გაზიარება გაუქმდა');
+        }
+    } else {
+        navigator.clipboard.writeText(textToShare);
+        alert('ტექსტი დაკოპირდა ბუფერში!');
+    }
+}
+</script>
+
+</body>
+</html>
