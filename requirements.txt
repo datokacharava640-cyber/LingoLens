@@ -1,6 +1,0 @@
-kivy==2.3.0
-google-generativeai
-requests
-certifi
-pillow
-python-multipart
