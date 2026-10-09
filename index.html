@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LingoLens - Google Lens Style</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; text-align: center; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .lang-selector { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        select { padding: 10px; border-radius: 8px; border: 1px solid #ccc; width: 42%; font-size: 16px; }
+        .camera-btn { background: #1a73e8; color: white; border: none; padding: 15px 25px; font-size: 18px; border-radius: 50px; cursor: pointer; margin: 15px 0; width: 100%; }
+        .result-box { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: left; min-height: 80px; border: 1px solid #ddd; word-break: break-word; }
+        .share-btn { background: #34a853; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-top: 10px; width: 100%; font-size: 16px; }
+        .sms-btn { background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-top: 10px; width: 100%; font-size: 16px; }
+        .voice-btn { background: #9c27b0; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-top: 10px; width: 100%; font-size: 16px; }
+        input[type="text"] { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-top: 10px; box-sizing: border-box; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>LingoLens</h2>
+    
+    <!-- ენების არჩევა -->
+    <div class="lang-selector">
+        <select id="sourceLang">
+            <option value="eng">ინგლისური</option>
+            <option value="ita">იტალიური</option>
+        </select>
+        <span>⇄</span>
+        <select id="targetLang">
+            <option value="ka">ქართული</option>
+        </select>
+    </div>
+
+    <!-- სურათის გადაღება / ატვირთვა -->
+    <input type="file" id="imageInput" accept="image/*" capture="environment" style="display: none;" onchange="uploadImage(event)">
+    <button class="camera-btn" onclick="document.getElementById('imageInput').click()">📷 სურათის გადაღება / ატვირთვა</button>
+
+    <!-- შედეგების ველი -->
+    <div class="result-box" id="resultOutput">აქ გამოჩნდება თარგმანი...</div>
+
+    <!-- ხმოვანი წაკითხვის ღილაკი -->
+    <button class="voice-btn" onclick="speakResult()">🔊 ტექსტის ხმოვანი წაკითხვა</button>
+
+    <!-- გაზიარების ღილაკი -->
+    <button class="share-btn" onclick="shareResult()">გაზიარება 📤</button>
+
+    <!-- SMS-ით გაგზავნის ბლოკი -->
+    <div style="margin-top: 20px; text-align: left;">
+        <label for="phoneNumber" style="font-size: 14px; font-weight: bold; color: #555;">ტელეფონის ნომერი SMS-ისთვის:</label>
+        <input type="text" id="phoneNumber" placeholder="+995XXXXXXXXX">
+        <button class="sms-btn" onclick="sendSms()">SMS-ით გაგზავნა 📱</button>
+    </div>
+</div>
+
+<script>
+const BACKEND_URL = "http://37.27.255.1:8000";
+const API_SECRET_KEY = "lingolens-secret-key-2026";
+
+async function uploadImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    document.getElementById("resultOutput").innerText = "მიმდინარეობს დამუშავება და თარგმნა...";
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("source_lang", document.getElementById("sourceLang").value);
+    formData.append("target_lang", document.getElementById("targetLang").value);
+
+    try {
+        const response = await fetch(`${BACKEND_URL}/translate-image/`, {
+            method: "POST",
+            headers: {
+                "X-API-Key": API_SECRET_KEY
+            },
+            body: formData
+        });
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+            document.getElementById("resultOutput").innerText = data.translated_text;
+        } else {
+            document.getElementById("resultOutput").innerText = "შეცდომა: " + (data.error || "უცნობი შეცდომა სერვერიდან");
+        }
+    } catch (err) {
+        document.getElementById("resultOutput").innerText = "კავშირი არ არის ინტერნეტთან ან სერვერთან!";
+    }
+}
+
+function speakResult() {
+    const textToSpeak = document.getElementById("resultOutput").innerText;
+    
+    if (!textToSpeak || textToSpeak === "აქ გამოჩნდება თარგმანი...") {
+        alert("წასაკითხი ტექსტი ცარიელია!");
+        return;
+    }
+
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = 'ka-GE'; 
+        utterance.rate = 1.0; 
+        utterance.pitch = 1.0; 
+        window.speechSynthesis.speak(utterance);
+    } else {
+        alert("თქვენი ბრაუზერი არ უჭერს მხარს ხმოვან წაკითხვას.");
+    }
+}
+
+async function shareResult() {
+    const textToShare = document.getElementById("resultOutput").innerText;
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: 'LingoLens თარგმანი',
+                text: textToShare,
+            });
+        } catch (error) {
+            console.log('გაზიარება გაუქმდა');
+        }
+    } else {
+        navigator.clipboard.writeText(textToShare);
+        alert('ტექსტი დაკოპირდა ბუფერში!');
+    }
+}
+
+async function sendSms() {
+    const phoneNumber = document.getElementById("phoneNumber").value;
+    const textToSend = document.getElementById("resultOutput").innerText;
+    
+    if (!phoneNumber || !textToSend || textToSend === "აქ გამოჩნდება თარგმანი...") {
+        alert("გთხოვთ შეიყვანეთ ტელეფონის ნომერი და იქონიეთ თარგმნილი ტექსტი!");
+        return;
+    }
+
+    try {
+        const response = await fetch(`${BACKEND_URL}/send-sms/`, {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "X-API-Key": API_SECRET_KEY
+            },
+            body: JSON.stringify({ phone_number: phoneNumber, text: textToSend })
+        });
+        const data = await response.json();
+        
+        if (response.ok) {
+            alert(data.message || "SMS წარმატებით გაიგზავნა!");
+        } else {
+            alert("შეცდომა SMS-ის გაგზავნისას: " + (data.detail || data.error));
+        }
+    } catch (err) {
+        alert("კავშირი არ არის სერვერთან ან ინტერნეტთან!");
+    }
+}
+</script>
+
+</body>
+</html>
