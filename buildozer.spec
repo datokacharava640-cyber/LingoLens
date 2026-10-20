@@ -13,7 +13,7 @@ source.exclude_patterns = Dockerfile, vercel.json, setup.py, *.ipynb, .env, .git
 version = 6.0.2
 
 # ამოღებულია ==2.3.0, რომ p4a-მ თავად შეარჩიოს თავსებადი Kivy
-requirements = python3,kivy,plyer,pyjnius,setuptools,requests,urllib3,certifi,idna,charset-normalizer
+requirements = python3==3.10.12,kivy,plyer,pyjnius,setuptools,requests,urllib3,certifi,idna,charset-normalizer
 
 # p4a-ს სტაბილური შტო
 p4a.branch = master
