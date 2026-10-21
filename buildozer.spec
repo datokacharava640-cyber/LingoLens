@@ -13,7 +13,7 @@ source.exclude_patterns = Dockerfile, vercel.json, setup.py, *.ipynb, .env, .git
 version = 6.0.2
 
 # ვაფიქსირებთ Python 3.10.11-ს Android-ისთვის
-requirements = python3==3.10.11,kivy,plyer,pyjnius,setuptools,requests,urllib3,certifi,idna,charset-normalizer
+requirements = python3,kivy,plyer,pyjnius,setuptools,requests,urllib3,certifi,idna,charset-normalizer
 
 p4a.branch = master
 
