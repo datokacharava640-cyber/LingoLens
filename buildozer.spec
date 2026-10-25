@@ -10,7 +10,7 @@ source.include_exts = py,png,jpg,jpeg,kv,atlas,ttf,json,wav,xml,html,md,txt
 source.exclude_dirs = tests, bin, venv, .git, .github, Google Colab
 source.exclude_patterns = Dockerfile, vercel.json, setup.py, *.ipynb, .env, .gitignore
 
-version = 6.0.3
+version = 6.0.5
 
 requirements = python3,kivy,plyer,pyjnius,setuptools,requests,urllib3,certifi,idna
 
@@ -38,5 +38,5 @@ android.optimize_python = False
 android.manifest.launch_mode = singleTask
 
 [buildozer]
-log_level = 2
+log_level = 5
 warn_on_root = 0
