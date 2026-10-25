@@ -37,5 +37,5 @@ android.optimize_python = False
 android.manifest.launch_mode = singleTask
 
 [buildozer]
-log_level = 2
+log_level = 1
 warn_on_root = 0
