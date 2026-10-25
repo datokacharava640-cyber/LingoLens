@@ -16,7 +16,7 @@ requirements = python3,kivy,plyer,pyjnius,setuptools,requests,urllib3,certifi,id
 
 # ვუთითებთ პითონის ზუსტ ვერსიას და p4a-ს სტაბილურ თეგს (პრეფიქსის გარეშე)
 p4a.python_version = 3.10
-p4a.branch = v2024.01.0
+p4a.branch = V2024.01.0
 
 orientation = portrait
 fullscreen = 0
