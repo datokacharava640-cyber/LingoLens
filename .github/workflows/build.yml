@@ -22,7 +22,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.buildozer
-          key: buildozer-v14-${{ hashFiles('buildozer.spec') }}-${{ runner.os }}
+          key: buildozer-v15-${{ hashFiles('buildozer.spec') }}-${{ runner.os }}
 
       - name: Install System Dependencies
         run: |
