@@ -32,7 +32,7 @@ android.allow_backup = True
 android.release_artifact = apk
 android.optimize_python = False
 android.manifest.launch_mode = singleTask
-p4a.python_version = 3.10
+p4a.python_version = 3.9
 
 [buildozer]
 log_level = 2
