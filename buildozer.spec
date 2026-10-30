@@ -11,7 +11,7 @@ source.exclude_patterns = Dockerfile, vercel.json, setup.py, *.ipynb, .env, .git
 
 version = 6.0.7
 
-requirements = python3,kivy,plyer,pyjnius,urllib3,certifi,idna
+requirements = python3,kivy,plyer,pyjnius
 
 orientation = portrait
 fullscreen = 0
