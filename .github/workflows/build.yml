@@ -1,0 +1,54 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Cache Buildozer global directory
+        uses: actions/cache@v4
+        with:
+          path: ~/.buildozer
+          key: buildozer-v70-${{ hashFiles('buildozer.spec') }}-${{ runner.os }}
+
+      - name: Install System Dependencies
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y \
+            git zip unzip openjdk-17-jdk autoconf libtool pkg-config \
+            zlib1g-dev libncurses5-dev libncursesw5-dev libreadline-dev \
+            libsqlite3-dev libssl-dev libffi-dev liblzma-dev \
+            build-essential ccache libstdc++6:i386 libgcc1:i386 zlib1g:i386 python3-pip python3-setuptools
+
+      - name: Install Buildozer, Cython & P4A
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install "Cython==0.29.36" "buildozer==1.5.0" "python-for-android==2023.9.16"
+
+      - name: Complete Clean Build Cache
+        run: |
+          rm -rf ~/.buildozer
+          rm -rf .buildozer
+
+      - name: Build APK with Buildozer
+        env:
+          CFLAGS: "-w"
+          CXXFLAGS: "-w"
+          P4A_PYTHON_VERSION: "3.11"
+        run: |
+          python3 -m buildozer -v android debug
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LingoLens-APK
+          path: bin/*.apk
