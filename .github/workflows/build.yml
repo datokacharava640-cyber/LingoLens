@@ -37,6 +37,7 @@ jobs:
         run: |
           rm -rf ~/.buildozer
           rm -rf .buildozer
+          pip cache purge
 
       - name: Build APK with Buildozer
         env:
