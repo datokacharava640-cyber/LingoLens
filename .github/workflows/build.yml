@@ -1,0 +1,54 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install System Dependencies
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y \
+            git zip unzip openjdk-17-jdk autoconf libtool pkg-config \
+            zlib1g-dev libncurses5-dev libncursesw5-dev libreadline-dev \
+            libsqlite3-dev libssl-dev libffi-dev liblzma-dev \
+            build-essential ccache
+
+      - name: Install Buildozer & Cython
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade Cython buildozer
+
+      - name: Complete Clean Build
+        run: |
+          rm -rf ~/.buildozer
+          rm -rf .buildozer
+          pip cache purge
+
+      - name: Build APK with Buildozer
+        env:
+          CFLAGS: "-w"
+          CXXFLAGS: "-w"
+          P4A_PYTHON_VERSION: "3.11"
+        run: |
+          buildozer -v android debug
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LingoLens-APK
+          path: bin/*.apk
