@@ -34,11 +34,15 @@ jobs:
           pip install --upgrade "Cython==3.0.11"
           pip install --upgrade https://github.com/kivy/buildozer/archive/master.zip
 
-      - name: Complete Clean Build
-        run: |
-          rm -rf ~/.buildozer
-          rm -rf .buildozer
-          pip cache purge
+      - name: Cache Buildozer Global Directory
+        uses: actions/cache@v4
+        with:
+          path: |
+            .buildozer
+            ~/.buildozer
+          key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
+          restore-keys: |
+            ${{ runner.os }}-buildozer-
 
       - name: Build APK with Buildozer
         env:
