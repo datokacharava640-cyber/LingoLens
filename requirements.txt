@@ -1,6 +1,0 @@
-kivy
-plyer
-pyjnius
-urllib3
-certifi
-idna
