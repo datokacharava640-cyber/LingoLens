@@ -7,7 +7,7 @@ source.dir = .
 source.include_exts = py,png,jpg,jpeg,kv,atlas,ttf,json,wav,xml,html,md,txt
 version = 6.0.7
 
-requirements = python3,kivy,pyjnius,plyer
+requirements = python3,kivy,pyjnius,plyer,android
 
 orientation = portrait
 fullscreen = 0
