@@ -33,7 +33,7 @@ android.optimize_python = False
 android.manifest.launch_mode = singleTask
 
 p4a.python_version = 3.11
-
+p4a.branch = stable
 
 [buildozer]
 log_level = 2
