@@ -26,7 +26,7 @@ android.archs = arm64-v8a
 
 p4a.python_version = 3.11
 p4a.branch = master
-
+p4a.extra_args = --python-version=3.11
 [buildozer]
 log_level = 2
 warn_on_root = 0
