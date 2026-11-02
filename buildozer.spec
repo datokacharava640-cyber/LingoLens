@@ -32,7 +32,7 @@ android.release_artifact = apk
 android.optimize_python = False
 android.manifest.launch_mode = singleTask
 
-p4a.python_version = 3.11
+
 p4a.branch = master
 
 [buildozer]
