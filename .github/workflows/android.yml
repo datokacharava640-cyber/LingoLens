@@ -24,6 +24,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Fix Ubuntu Mirrors
+        run: |
+          sudo sed -i 's|azure.archive.ubuntu.com|archive.ubuntu.com|g' /etc/apt/sources.list
+          sudo sed -i 's|security.ubuntu.com|archive.ubuntu.com|g' /etc/apt/sources.list
+
       - name: Install System Dependencies
         run: |
           sudo dpkg --add-architecture i386
