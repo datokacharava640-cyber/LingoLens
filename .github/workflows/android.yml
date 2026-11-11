@@ -26,8 +26,10 @@ jobs:
 
       - name: Fix Ubuntu Mirrors
         run: |
-          sudo sed -i 's|azure.archive.ubuntu.com|archive.ubuntu.com|g' /etc/apt/sources.list
-          sudo sed -i 's|security.ubuntu.com|archive.ubuntu.com|g' /etc/apt/sources.list
+          sudo sed -i 's|azure.archive.ubuntu.com|archive.ubuntu.com|g' /etc/apt/sources.list.d/ubuntu.sources || true
+          sudo sed -i 's|security.ubuntu.com|archive.ubuntu.com|g' /etc/apt/sources.list.d/ubuntu.sources || true
+          sudo sed -i 's|azure.archive.ubuntu.com|archive.ubuntu.com|g' /etc/apt/sources.list || true
+          sudo sed -i 's|security.ubuntu.com|archive.ubuntu.com|g' /etc/apt/sources.list || true
 
       - name: Install System Dependencies
         run: |
